@@ -1,8 +1,9 @@
 from app.services.llm import generate_result
 from app.services.band_bridge import send_handoff
 from app.services.news import search_news
-from pathlib import Path
+from app.services.finch import load_skill as load_finch_skill
 from datetime import datetime, timezone
+import uuid
 
 AGENTS=[
  {'id':'analyst','name':'Market Analyst','role':'Quantitative research','color':'cyan','description':'Reads price action, valuation and momentum.'},
@@ -14,24 +15,24 @@ AGENTS=[
 ]
 
 def load_skill(name):
-    path=Path(__file__).resolve().parents[1]/'skills'/name/'SKILL.md'
-    try: return path.read_text(encoding='utf-8')
-    except Exception: return ''
+    content, _path, _loaded = load_finch_skill(name)
+    return content
 
 def run_committee(req, quote):
     sym=req.symbol.upper(); price=quote['price']; pct=quote['change_pct']; amount=req.investment_amount
     events=[]; handoffs=[]; model_calls=[]
+    run_session_id = f"marketmind-{uuid.uuid4().hex}"
     def emit(agent,stage,title,body,meta,evidence=None,confidence=None,start_time=None,completion_time=None,status='completed'):
         now=datetime.now(timezone.utc).isoformat()
         start=start_time or now
         if status == 'completed' and not meta.get('live'):
             status='completed_with_fallback'
-        event={'agent':agent,'stage':stage,'title':title,'body':body,'confidence':confidence,'provider':meta['provider'],'live_reasoning':meta['live'],'provider_error':meta.get('error'),
+        event={'agent':agent,'stage':stage,'title':title,'body':body,'confidence':confidence,'provider':meta['provider'],'live_reasoning':meta['live'],'provider_error':meta.get('error'),'provider_attempts':meta.get('attempts',[]),
           'execution_status':status,'started_at':start,'completed_at':completion_time or now,'evidence_references':evidence or []}
         events.append(event)
-        model_calls.append({'agent':agent,'provider':meta['provider'],'live_reasoning':meta['live'],'status_code':meta.get('status_code'),'error_code':meta.get('error_code'),'error':meta.get('error'),'started_at':start,'completed_at':completion_time or now,'execution_status':status})
+        model_calls.append({'agent':agent,'provider':meta['provider'],'live_reasoning':meta['live'],'status_code':meta.get('status_code'),'error_code':meta.get('error_code'),'error':meta.get('error'),'attempts':meta.get('attempts',[]),'started_at':start,'completed_at':completion_time or now,'execution_status':status})
     def think(role,system,prompt,fallback):
-        result=generate_result(system,prompt,use_lyzr=True,agent_role=role)
+        result=generate_result(system,prompt,use_lyzr=True,agent_role=role,session_id=f"{run_session_id}-{role}")
         result['text']=result['text'].strip() if result['text'] else fallback
         return result
     def handoff(sender,recipient,payload):
@@ -75,30 +76,35 @@ def run_committee(req, quote):
     flags=[]
     if approved_amount < amount: flags.append(f'Requested amount capped from ${amount:,.2f} to ${approved_amount:,.2f} ({risk_pct}% of ${req.portfolio_value:,.2f} portfolio).')
     if quote.get('is_demo'): flags.append('Synthetic quote: paper simulation only; live market price unavailable.')
-    if not news_data.get('is_live'): flags.append('Live news unavailable; catalyst coverage is incomplete.')
+    if not news_data.get('is_live'): flags.append(f'Live news unavailable ({news_data.get("status", "PROVIDER_UNAVAILABLE")}); catalyst coverage is incomplete. Do not interpret this as no news.')
     if news_data.get('is_live') and not news_data.get('count'): flags.append('News provider returned zero matching articles; this does not prove no relevant news exists.')
     if abs(pct)>5: flags.append('Elevated single-session move; consider waiting for confirmation.')
     if req.max_position_pct>risk_pct: flags.append(f'Position limit reduced to {risk_pct}% under {req.risk_tolerance} policy.')
     risk_ok=not (req.risk_tolerance=='conservative' and abs(pct)>3) and price>0 and amount<=1000000
-    risk_fallback=f"RISK REVIEW: {'PASS for paper simulation' if risk_ok else 'VETO'}. Position policy ceiling {risk_pct}%. {' '.join(flags) if flags else 'No deterministic policy breach detected.'} This is not a probability-of-loss estimate."
+    risk_status='VETO' if not risk_ok else ('WARNING' if flags else 'PASS')
+    risk_fallback=f"RISK REVIEW: {risk_status}. Position policy ceiling {risk_pct}%. {' '.join(flags) if flags else 'No deterministic policy breach detected.'} Permitted amount: ${approved_amount:,.2f}. This is not a probability-of-loss estimate."
     risk_start=datetime.now(timezone.utc).isoformat()
-    risk=think('risk','You are an independent risk officer. You may veto. Prioritize capital preservation. Your prose cannot override deterministic gate.\n\nFinch risk skill:\n'+load_skill('risk-check'),
-      f'Evaluate {sym}. Requested amount {amount}; portfolio value {req.portfolio_value}; hard allowed amount {approved_amount}; max position {risk_pct}%. Risk tolerance {req.risk_tolerance}. Quote {quote}. Bull: {bull["text"]}. Bear: {bear["text"]}. Live news={news_data.get("is_live")}. Explain risks and controls.',risk_fallback)
-    emit('risk','control','Independent risk gate evaluated',risk['text'],risk,[{'type':'bull_output','agent':'bull'},{'type':'bear_output','agent':'bear'},{'type':'risk_policy','position_cap_pct':risk_pct,'risk_tolerance':req.risk_tolerance,'gate_pass':risk_ok}],None,risk_start,datetime.now(timezone.utc).isoformat())
-    handoff('risk','chair',risk['text'])
+    risk=think('risk','You are the independent risk officer. Evaluate risk BEFORE the Portfolio Chair makes the BUY, HOLD, or REJECT decision. Do not require a BUY proposal or BUY confirmation before approval. Prioritize capital preservation, and make clear that your analysis cannot override the deterministic gate.\n\nFinch risk skill:\n'+load_skill('risk-check'),
+      f'Evaluate {sym} for horizon {req.horizon}. Requested amount: ${amount:,.2f}; portfolio value: ${req.portfolio_value:,.2f}; permitted amount: ${approved_amount:,.2f}; position policy ceiling: {risk_pct}%; risk tolerance: {req.risk_tolerance}. Quote: {quote}. Bull report: {bull["text"]}. Bear report: {bear["text"]}. Deterministic gate status: {risk_status}; deterministic gate pass={risk_ok}; risk flags: {"; ".join(flags) if flags else "none"}. Explain risks and controls before the Chair decides.',risk_fallback)
+    risk_report=risk['text'].rstrip()+f"\n\nDETERMINISTIC GATE: {risk_status}. PERMITTED AMOUNT: ${approved_amount:,.2f}. Gate pass={risk_ok}."
+    emit('risk','control','Independent risk gate evaluated',risk_report,risk,[{'type':'bull_output','agent':'bull'},{'type':'bear_output','agent':'bear'},{'type':'risk_policy','position_cap_pct':risk_pct,'risk_tolerance':req.risk_tolerance,'gate_pass':risk_ok,'gate_status':risk_status,'permitted_amount':approved_amount}],None,risk_start,datetime.now(timezone.utc).isoformat())
+    handoff('risk','chair',risk_report)
     # Transparent rule-based committee signal, never represented as predictive accuracy.
     bull_score=max(35,min(85,62+max(-8,min(8,pct))*1.8)); bear_score=max(35,min(90,61+max(-8,min(8,-pct))*1.8+(5 if (quote.get('pe') or 0)>45 else 0)))
     decision='REJECT' if not risk_ok else ('BUY' if bull_score>=bear_score+1 else 'HOLD')
     chair_start=datetime.now(timezone.utc).isoformat()
     confidence=None
-    chair=think('chair','You are chair of an investment committee. Give a balanced decision, never claim certainty, and obey deterministic risk veto.',
-      f'Decide BUY/HOLD/REJECT for {sym}. Bull: {bull["text"]}. Bear: {bear["text"]}. Risk: {risk["text"]}. Hard risk gate pass={risk_ok}. Rule-based signal={decision}. Live quote={not quote.get("is_demo")}; live news={news_data.get("is_live")}. Give rationale, revisit triggers and data caveats. Do not change the hard decision.',
+    chair=think('chair','You are chair of an investment committee. Give a balanced decision, never claim certainty, and obey the deterministic risk gate and deterministic BUY/HOLD/REJECT decision as final. The risk gate and final decision cannot be overridden by your LLM response.',
+      f'Decide and summarize BUY/HOLD/REJECT for {sym}. Investment horizon: {req.horizon}. Requested amount: ${amount:,.2f}; permitted amount: ${approved_amount:,.2f}; portfolio value: ${req.portfolio_value:,.2f}; risk tolerance: {req.risk_tolerance}. Bull report: {bull["text"]}. Bear report: {bear["text"]}. Authoritative risk report: {risk_report}. Risk gate status: {risk_status}; hard risk gate pass={risk_ok}. Deterministic final decision={decision}. Live quote={not quote.get("is_demo")}; live news={news_data.get("is_live")}. Revisit triggers and data caveats, but do not change the final decision or risk gate.',
       f'COMMITTEE DECISION: {decision}. The decision follows the transparent rule-based committee signal and deterministic risk gate. Revisit after confirming price, primary filings, earnings guidance and catalyst calendar. Paper simulation only; not investment advice.')
-    emit('chair','decision',f'Committee decision: {decision}',chair['text'],chair,[{'type':'bull_output','agent':'bull'},{'type':'bear_output','agent':'bear'},{'type':'risk_output','agent':'risk','gate_pass':risk_ok},{'type':'deterministic_decision','decision':decision}],None,chair_start,datetime.now(timezone.utc).isoformat())
+    chair_report=chair['text'].rstrip()+f"\n\nAUTHORITATIVE FINAL DECISION: {decision}. INVESTMENT HORIZON: {req.horizon}. RISK GATE STATUS: {risk_status}."
+    emit('chair','decision',f'Committee decision: {decision}',chair_report,chair,[{'type':'bull_output','agent':'bull'},{'type':'bear_output','agent':'bear'},{'type':'risk_output','agent':'risk','gate_pass':risk_ok,'gate_status':risk_status},{'type':'deterministic_decision','decision':decision}],None,chair_start,datetime.now(timezone.utc).isoformat())
     handoff('chair','analyst',f'Decision {decision}; monitor invalidation and refresh evidence.')
     return {'symbol':sym,'company':req.company,'quote':quote,'news':news_data,'investment_amount':approved_amount,'requested_investment_amount':amount,'portfolio_value':req.portfolio_value,'allocation_cap_amount':allocation_cap,'horizon':req.horizon,'risk_tolerance':req.risk_tolerance,
       'decision':decision,'confidence':confidence,'risk_approved':risk_ok,'suggested_allocation_pct':risk_pct,'suggested_shares':round(approved_amount/price,6) if decision=='BUY' and price else 0,
-      'agents':AGENTS,'events':events,'handoffs':handoffs,'theses':{'bull':bull['text'],'bear':bear['text']},'risk_report':risk['text'],'chair_report':chair['text'],
+      'agents':AGENTS,'events':events,'handoffs':handoffs,'theses':{'bull':bull['text'],'bear':bear['text']},
+      'risk_report':risk_report,'chair_report':chair_report,
       'data_caveats':flags,'execution':'PAPER_ONLY','model_calls':model_calls,
+      'skill_provenance':{'market_research_loaded':bool(load_skill('market-research')),'risk_check_loaded':bool(load_skill('risk-check'))},
       'integration_summary':{'live_quote':not quote.get('is_demo'),'live_news':news_data.get('is_live',False),'llm_agents':sum(1 for x in model_calls if x['live_reasoning']),'total_agents':6,
         'band_messages_sent':sum(1 for h in handoffs if h['band'].get('sent')),'band_handoffs_attempted':len(handoffs)}}

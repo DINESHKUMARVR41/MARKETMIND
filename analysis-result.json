@@ -1,0 +1,524 @@
+{
+    "symbol":  "MSFT",
+    "company":  "Microsoft",
+    "quote":  {
+                  "symbol":  "MSFT",
+                  "price":  484.52,
+                  "change":  -39.360000000000014,
+                  "change_pct":  -7.513170955180579,
+                  "volume":  47123700,
+                  "currency":  "USD",
+                  "exchange":  "NMS",
+                  "market_state":  null,
+                  "sector":  null,
+                  "pe":  null,
+                  "summary":  "Quote and volume from Yahoo Finance chart endpoint. Fundamentals are not included.",
+                  "source":  "Yahoo Finance chart",
+                  "is_demo":  false,
+                  "data_timestamp":  "2026-11-20T21:00:00+00:00",
+                  "timestamp":  "2026-11-23T13:10:38.887629+00:00",
+                  "disclaimer":  "Convenience data endpoint; may be delayed, incomplete or unavailable. Not an exchange execution feed."
+              },
+    "news":  {
+                 "query":  "(\"Microsoft\" OR \"MSFT\")",
+                 "source":  "GDELT DOC 2.0 + Yahoo Finance Search News",
+                 "status":  "PROVIDER_UNAVAILABLE",
+                 "is_live":  false,
+                 "articles":  [
+
+                              ],
+                 "count":  0,
+                 "window":  "7 days / provider-defined",
+                 "retrieved_at":  "2026-11-23T13:09:52.063907+00:00",
+                 "provider_chain":  [
+                                        "GDELT DOC 2.0",
+                                        "Yahoo Finance Search News"
+                                    ],
+                 "provider_errors":  [
+                                         {
+                                             "provider":  "GDELT DOC 2.0",
+                                             "error":  "429 Client Error: Too Many Requests for url: https://api.gdeltproject.org/api/v2/doc/doc?query=%28%22Microsoft%22+OR+%22MSFT%22%29\u0026mode=ArtList\u0026format=json\u0026maxrecords=8\u0026timespan=7d\u0026sort=DateDesc"
+                                         },
+                                         {
+                                             "provider":  "Yahoo Finance Search News",
+                                             "error":  "Successful response contained zero articles"
+                                         }
+                                     ],
+                 "warning":  "Live news providers did not supply articles. This does not establish that no relevant news exists.",
+                 "cached":  true
+             },
+    "investment_amount":  100.0,
+    "requested_investment_amount":  100.0,
+    "portfolio_value":  10000.0,
+    "allocation_cap_amount":  1500.0,
+    "horizon":  "month",
+    "risk_tolerance":  "balanced",
+    "decision":  "HOLD",
+    "confidence":  null,
+    "risk_approved":  true,
+    "suggested_allocation_pct":  15,
+    "suggested_shares":  0,
+    "agents":  [
+                   {
+                       "id":  "analyst",
+                       "name":  "Market Analyst",
+                       "role":  "Quantitative research",
+                       "color":  "cyan",
+                       "description":  "Reads price action, valuation and momentum."
+                   },
+                   {
+                       "id":  "news",
+                       "name":  "News Intelligence",
+                       "role":  "Catalyst research",
+                       "color":  "violet",
+                       "description":  "Searches current news coverage and extracts catalysts."
+                   },
+                   {
+                       "id":  "bull",
+                       "name":  "Bull Advocate",
+                       "role":  "Upside thesis",
+                       "color":  "green",
+                       "description":  "Builds the strongest evidence-backed upside case."
+                   },
+                   {
+                       "id":  "bear",
+                       "name":  "Bear Challenger",
+                       "role":  "Downside thesis",
+                       "color":  "rose",
+                       "description":  "Stress-tests assumptions and identifies downside."
+                   },
+                   {
+                       "id":  "risk",
+                       "name":  "Risk Guardian",
+                       "role":  "Independent risk control",
+                       "color":  "amber",
+                       "description":  "Applies hard portfolio and position constraints."
+                   },
+                   {
+                       "id":  "chair",
+                       "name":  "Portfolio Chair",
+                       "role":  "Decision synthesis",
+                       "color":  "blue",
+                       "description":  "Synthesizes the committee into a final decision."
+                   }
+               ],
+    "events":  [
+                   {
+                       "agent":  "analyst",
+                       "stage":  "research",
+                       "title":  "Market structure mapped",
+                       "body":  "MSFT is quoted at USD 484.52, session move -7.51%. Source: Yahoo Finance chart. Volume: 47,123,700. The feed does not supply complete fundamentals. Treat this as a price snapshot, not a forecast. Review trend persistence, liquidity, earnings revisions and valuation before acting.",
+                       "confidence":  null,
+                       "provider":  "Gemini",
+                       "live_reasoning":  false,
+                       "provider_error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m20s or upgrade your tier at https://ai.dev/rate-limit.",
+                       "provider_attempts":  [
+                                                 {
+                                                     "provider":  "Gemini",
+                                                     "status":  "failed",
+                                                     "status_code":  429,
+                                                     "error_code":  "GEMINI_RATE_LIMITED",
+                                                     "error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m20s or upgrade your tier at https://ai.dev/rate-limit."
+                                                 }
+                                             ],
+                       "execution_status":  "completed_with_fallback",
+                       "started_at":  "2026-11-23T13:10:38.889941+00:00",
+                       "completed_at":  "2026-11-23T13:10:39.890802+00:00",
+                       "evidence_references":  [
+                                                   {
+                                                       "type":  "quote",
+                                                       "source":  "Yahoo Finance chart",
+                                                       "symbol":  "MSFT",
+                                                       "timestamp":  "2026-11-23T13:10:38.887629+00:00"
+                                                   }
+                                               ]
+                   },
+                   {
+                       "agent":  "news",
+                       "stage":  "research",
+                       "title":  "Catalyst scan completed",
+                       "body":  "Live news search unavailable.  Do not infer that no news exists. Verify earnings, guidance, regulatory notices and sector developments from primary sources.",
+                       "confidence":  null,
+                       "provider":  "Gemini",
+                       "live_reasoning":  false,
+                       "provider_error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m20s or upgrade your tier at https://ai.dev/rate-limit.",
+                       "provider_attempts":  [
+                                                 {
+                                                     "provider":  "Gemini",
+                                                     "status":  "failed",
+                                                     "status_code":  429,
+                                                     "error_code":  "GEMINI_RATE_LIMITED",
+                                                     "error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m20s or upgrade your tier at https://ai.dev/rate-limit."
+                                                 }
+                                             ],
+                       "execution_status":  "completed_with_fallback",
+                       "started_at":  "2026-11-23T13:10:39.890802+00:00",
+                       "completed_at":  "2026-11-23T13:10:40.527854+00:00",
+                       "evidence_references":  [
+
+                                               ]
+                   },
+                   {
+                       "agent":  "bull",
+                       "stage":  "debate",
+                       "title":  "Bull case submitted",
+                       "body":  "UPSIDE CASE: MSFT may benefit if its core growth narrative converts into durable earnings and the trend persists. This is a hypothesis, not a verified forecast. Invalidation: weaker guidance, margin compression or sustained loss of momentum.",
+                       "confidence":  null,
+                       "provider":  "Gemini",
+                       "live_reasoning":  false,
+                       "provider_error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m19s or upgrade your tier at https://ai.dev/rate-limit.",
+                       "provider_attempts":  [
+                                                 {
+                                                     "provider":  "Gemini",
+                                                     "status":  "failed",
+                                                     "status_code":  429,
+                                                     "error_code":  "GEMINI_RATE_LIMITED",
+                                                     "error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m19s or upgrade your tier at https://ai.dev/rate-limit."
+                                                 }
+                                             ],
+                       "execution_status":  "completed_with_fallback",
+                       "started_at":  "2026-11-23T13:10:40.527854+00:00",
+                       "completed_at":  "2026-11-23T13:10:41.336351+00:00",
+                       "evidence_references":  [
+                                                   {
+                                                       "type":  "analyst_output",
+                                                       "agent":  "analyst"
+                                                   },
+                                                   {
+                                                       "type":  "news_output",
+                                                       "agent":  "news"
+                                                   }
+                                               ]
+                   },
+                   {
+                       "agent":  "bear",
+                       "stage":  "debate",
+                       "title":  "Bear case challenges assumptions",
+                       "body":  "DOWNSIDE CASE: the thesis may already be priced in. A -7.51% session move is not proof of durable momentum. Valuation, execution and macro sensitivity can compress multiples. Missing verified filings and detailed fundamentals are material blind spots.",
+                       "confidence":  null,
+                       "provider":  "Gemini",
+                       "live_reasoning":  false,
+                       "provider_error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m18s or upgrade your tier at https://ai.dev/rate-limit.",
+                       "provider_attempts":  [
+                                                 {
+                                                     "provider":  "Gemini",
+                                                     "status":  "failed",
+                                                     "status_code":  429,
+                                                     "error_code":  "GEMINI_RATE_LIMITED",
+                                                     "error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m18s or upgrade your tier at https://ai.dev/rate-limit."
+                                                 }
+                                             ],
+                       "execution_status":  "completed_with_fallback",
+                       "started_at":  "2026-11-23T13:10:41.336351+00:00",
+                       "completed_at":  "2026-11-23T13:10:42.097551+00:00",
+                       "evidence_references":  [
+                                                   {
+                                                       "type":  "bull_output",
+                                                       "agent":  "bull"
+                                                   },
+                                                   {
+                                                       "type":  "quote",
+                                                       "symbol":  "MSFT"
+                                                   },
+                                                   {
+                                                       "type":  "news_status",
+                                                       "status":  "PROVIDER_UNAVAILABLE"
+                                                   }
+                                               ]
+                   },
+                   {
+                       "agent":  "risk",
+                       "stage":  "control",
+                       "title":  "Independent risk gate evaluated",
+                       "body":  "RISK REVIEW: PASS for paper simulation. Position policy ceiling 15%. Live news unavailable (PROVIDER_UNAVAILABLE); catalyst coverage is incomplete. Do not interpret this as no news. Elevated single-session move; consider waiting for confirmation. Position limit reduced to 15% under balanced policy. This is not a probability-of-loss estimate.",
+                       "confidence":  null,
+                       "provider":  "Gemini",
+                       "live_reasoning":  false,
+                       "provider_error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m17s or upgrade your tier at https://ai.dev/rate-limit.",
+                       "provider_attempts":  [
+                                                 {
+                                                     "provider":  "Gemini",
+                                                     "status":  "failed",
+                                                     "status_code":  429,
+                                                     "error_code":  "GEMINI_RATE_LIMITED",
+                                                     "error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m17s or upgrade your tier at https://ai.dev/rate-limit."
+                                                 }
+                                             ],
+                       "execution_status":  "completed_with_fallback",
+                       "started_at":  "2026-11-23T13:10:42.097551+00:00",
+                       "completed_at":  "2026-11-23T13:10:42.621663+00:00",
+                       "evidence_references":  [
+                                                   {
+                                                       "type":  "bull_output",
+                                                       "agent":  "bull"
+                                                   },
+                                                   {
+                                                       "type":  "bear_output",
+                                                       "agent":  "bear"
+                                                   },
+                                                   {
+                                                       "type":  "risk_policy",
+                                                       "position_cap_pct":  15,
+                                                       "risk_tolerance":  "balanced",
+                                                       "gate_pass":  true
+                                                   }
+                                               ]
+                   },
+                   {
+                       "agent":  "chair",
+                       "stage":  "decision",
+                       "title":  "Committee decision: HOLD",
+                       "body":  "COMMITTEE DECISION: HOLD. The decision follows the transparent rule-based committee signal and deterministic risk gate. Revisit after confirming price, primary filings, earnings guidance and catalyst calendar. Paper simulation only; not investment advice.",
+                       "confidence":  null,
+                       "provider":  "Gemini",
+                       "live_reasoning":  false,
+                       "provider_error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m17s or upgrade your tier at https://ai.dev/rate-limit.",
+                       "provider_attempts":  [
+                                                 {
+                                                     "provider":  "Gemini",
+                                                     "status":  "failed",
+                                                     "status_code":  429,
+                                                     "error_code":  "GEMINI_RATE_LIMITED",
+                                                     "error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m17s or upgrade your tier at https://ai.dev/rate-limit."
+                                                 }
+                                             ],
+                       "execution_status":  "completed_with_fallback",
+                       "started_at":  "2026-11-23T13:10:42.621663+00:00",
+                       "completed_at":  "2026-11-23T13:10:43.142558+00:00",
+                       "evidence_references":  [
+                                                   {
+                                                       "type":  "bull_output",
+                                                       "agent":  "bull"
+                                                   },
+                                                   {
+                                                       "type":  "bear_output",
+                                                       "agent":  "bear"
+                                                   },
+                                                   {
+                                                       "type":  "risk_output",
+                                                       "agent":  "risk",
+                                                       "gate_pass":  true
+                                                   },
+                                                   {
+                                                       "type":  "deterministic_decision",
+                                                       "decision":  "HOLD"
+                                                   }
+                                               ]
+                   }
+               ],
+    "handoffs":  [
+                     {
+                         "from":  "analyst",
+                         "to":  "bull",
+                         "payload":  "MSFT is quoted at USD 484.52, session move -7.51%. Source: Yahoo Finance chart. Volume: 47,123,700. The feed does not supply complete fundamentals. Treat this as a price snapshot, not a forecast. Review trend persistence, liquidity, earnings revisions and valuation before acting.",
+                         "band":  {
+                                      "sent":  false,
+                                      "processed":  false,
+                                      "mode":  "local",
+                                      "reason":  "Missing BAND_CHAT_ID, sender key, or recipient participant mapping."
+                                  }
+                     },
+                     {
+                         "from":  "news",
+                         "to":  "bull",
+                         "payload":  "Live news search unavailable.  Do not infer that no news exists. Verify earnings, guidance, regulatory notices and sector developments from primary sources.",
+                         "band":  {
+                                      "sent":  false,
+                                      "processed":  false,
+                                      "mode":  "local",
+                                      "reason":  "Missing BAND_CHAT_ID, sender key, or recipient participant mapping."
+                                  }
+                     },
+                     {
+                         "from":  "bull",
+                         "to":  "bear",
+                         "payload":  "UPSIDE CASE: MSFT may benefit if its core growth narrative converts into durable earnings and the trend persists. This is a hypothesis, not a verified forecast. Invalidation: weaker guidance, margin compression or sustained loss of momentum.",
+                         "band":  {
+                                      "sent":  false,
+                                      "processed":  false,
+                                      "mode":  "local",
+                                      "reason":  "Missing BAND_CHAT_ID, sender key, or recipient participant mapping."
+                                  }
+                     },
+                     {
+                         "from":  "bear",
+                         "to":  "risk",
+                         "payload":  "DOWNSIDE CASE: the thesis may already be priced in. A -7.51% session move is not proof of durable momentum. Valuation, execution and macro sensitivity can compress multiples. Missing verified filings and detailed fundamentals are material blind spots.",
+                         "band":  {
+                                      "sent":  false,
+                                      "processed":  false,
+                                      "mode":  "local",
+                                      "reason":  "Missing BAND_CHAT_ID, sender key, or recipient participant mapping."
+                                  }
+                     },
+                     {
+                         "from":  "risk",
+                         "to":  "chair",
+                         "payload":  "RISK REVIEW: PASS for paper simulation. Position policy ceiling 15%. Live news unavailable (PROVIDER_UNAVAILABLE); catalyst coverage is incomplete. Do not interpret this as no news. Elevated single-session move; consider waiting for confirmation. Position limit reduced to 15% under balanced policy. This is not a probability-of-loss estimate.",
+                         "band":  {
+                                      "sent":  false,
+                                      "processed":  false,
+                                      "mode":  "local",
+                                      "reason":  "Missing BAND_CHAT_ID, sender key, or recipient participant mapping."
+                                  }
+                     },
+                     {
+                         "from":  "chair",
+                         "to":  "analyst",
+                         "payload":  "Decision HOLD; monitor invalidation and refresh evidence.",
+                         "band":  {
+                                      "sent":  false,
+                                      "processed":  false,
+                                      "mode":  "local",
+                                      "reason":  "Missing BAND_CHAT_ID, sender key, or recipient participant mapping."
+                                  }
+                     }
+                 ],
+    "theses":  {
+                   "bull":  "UPSIDE CASE: MSFT may benefit if its core growth narrative converts into durable earnings and the trend persists. This is a hypothesis, not a verified forecast. Invalidation: weaker guidance, margin compression or sustained loss of momentum.",
+                   "bear":  "DOWNSIDE CASE: the thesis may already be priced in. A -7.51% session move is not proof of durable momentum. Valuation, execution and macro sensitivity can compress multiples. Missing verified filings and detailed fundamentals are material blind spots."
+               },
+    "risk_report":  "RISK REVIEW: PASS for paper simulation. Position policy ceiling 15%. Live news unavailable (PROVIDER_UNAVAILABLE); catalyst coverage is incomplete. Do not interpret this as no news. Elevated single-session move; consider waiting for confirmation. Position limit reduced to 15% under balanced policy. This is not a probability-of-loss estimate.",
+    "chair_report":  "COMMITTEE DECISION: HOLD. The decision follows the transparent rule-based committee signal and deterministic risk gate. Revisit after confirming price, primary filings, earnings guidance and catalyst calendar. Paper simulation only; not investment advice.",
+    "data_caveats":  [
+                         "Live news unavailable (PROVIDER_UNAVAILABLE); catalyst coverage is incomplete. Do not interpret this as no news.",
+                         "Elevated single-session move; consider waiting for confirmation.",
+                         "Position limit reduced to 15% under balanced policy."
+                     ],
+    "execution":  "PAPER_ONLY",
+    "model_calls":  [
+                        {
+                            "agent":  "analyst",
+                            "provider":  "Gemini",
+                            "live_reasoning":  false,
+                            "status_code":  429,
+                            "error_code":  "GEMINI_RATE_LIMITED",
+                            "error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m20s or upgrade your tier at https://ai.dev/rate-limit.",
+                            "attempts":  [
+                                             {
+                                                 "provider":  "Gemini",
+                                                 "status":  "failed",
+                                                 "status_code":  429,
+                                                 "error_code":  "GEMINI_RATE_LIMITED",
+                                                 "error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m20s or upgrade your tier at https://ai.dev/rate-limit."
+                                             }
+                                         ],
+                            "started_at":  "2026-11-23T13:10:38.889941+00:00",
+                            "completed_at":  "2026-11-23T13:10:39.890802+00:00",
+                            "execution_status":  "completed_with_fallback"
+                        },
+                        {
+                            "agent":  "news",
+                            "provider":  "Gemini",
+                            "live_reasoning":  false,
+                            "status_code":  429,
+                            "error_code":  "GEMINI_RATE_LIMITED",
+                            "error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m20s or upgrade your tier at https://ai.dev/rate-limit.",
+                            "attempts":  [
+                                             {
+                                                 "provider":  "Gemini",
+                                                 "status":  "failed",
+                                                 "status_code":  429,
+                                                 "error_code":  "GEMINI_RATE_LIMITED",
+                                                 "error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m20s or upgrade your tier at https://ai.dev/rate-limit."
+                                             }
+                                         ],
+                            "started_at":  "2026-11-23T13:10:39.890802+00:00",
+                            "completed_at":  "2026-11-23T13:10:40.527854+00:00",
+                            "execution_status":  "completed_with_fallback"
+                        },
+                        {
+                            "agent":  "bull",
+                            "provider":  "Gemini",
+                            "live_reasoning":  false,
+                            "status_code":  429,
+                            "error_code":  "GEMINI_RATE_LIMITED",
+                            "error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m19s or upgrade your tier at https://ai.dev/rate-limit.",
+                            "attempts":  [
+                                             {
+                                                 "provider":  "Gemini",
+                                                 "status":  "failed",
+                                                 "status_code":  429,
+                                                 "error_code":  "GEMINI_RATE_LIMITED",
+                                                 "error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m19s or upgrade your tier at https://ai.dev/rate-limit."
+                                             }
+                                         ],
+                            "started_at":  "2026-11-23T13:10:40.527854+00:00",
+                            "completed_at":  "2026-11-23T13:10:41.336351+00:00",
+                            "execution_status":  "completed_with_fallback"
+                        },
+                        {
+                            "agent":  "bear",
+                            "provider":  "Gemini",
+                            "live_reasoning":  false,
+                            "status_code":  429,
+                            "error_code":  "GEMINI_RATE_LIMITED",
+                            "error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m18s or upgrade your tier at https://ai.dev/rate-limit.",
+                            "attempts":  [
+                                             {
+                                                 "provider":  "Gemini",
+                                                 "status":  "failed",
+                                                 "status_code":  429,
+                                                 "error_code":  "GEMINI_RATE_LIMITED",
+                                                 "error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m18s or upgrade your tier at https://ai.dev/rate-limit."
+                                             }
+                                         ],
+                            "started_at":  "2026-11-23T13:10:41.336351+00:00",
+                            "completed_at":  "2026-11-23T13:10:42.097551+00:00",
+                            "execution_status":  "completed_with_fallback"
+                        },
+                        {
+                            "agent":  "risk",
+                            "provider":  "Gemini",
+                            "live_reasoning":  false,
+                            "status_code":  429,
+                            "error_code":  "GEMINI_RATE_LIMITED",
+                            "error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m17s or upgrade your tier at https://ai.dev/rate-limit.",
+                            "attempts":  [
+                                             {
+                                                 "provider":  "Gemini",
+                                                 "status":  "failed",
+                                                 "status_code":  429,
+                                                 "error_code":  "GEMINI_RATE_LIMITED",
+                                                 "error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m17s or upgrade your tier at https://ai.dev/rate-limit."
+                                             }
+                                         ],
+                            "started_at":  "2026-11-23T13:10:42.097551+00:00",
+                            "completed_at":  "2026-11-23T13:10:42.621663+00:00",
+                            "execution_status":  "completed_with_fallback"
+                        },
+                        {
+                            "agent":  "chair",
+                            "provider":  "Gemini",
+                            "live_reasoning":  false,
+                            "status_code":  429,
+                            "error_code":  "GEMINI_RATE_LIMITED",
+                            "error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m17s or upgrade your tier at https://ai.dev/rate-limit.",
+                            "attempts":  [
+                                             {
+                                                 "provider":  "Gemini",
+                                                 "status":  "failed",
+                                                 "status_code":  429,
+                                                 "error_code":  "GEMINI_RATE_LIMITED",
+                                                 "error":  "Rate limit exceeded for model gemini-2.5-flash (limit: 20 requests per day on Free Tier). Please retry in 18h49m17s or upgrade your tier at https://ai.dev/rate-limit."
+                                             }
+                                         ],
+                            "started_at":  "2026-11-23T13:10:42.621663+00:00",
+                            "completed_at":  "2026-11-23T13:10:43.142558+00:00",
+                            "execution_status":  "completed_with_fallback"
+                        }
+                    ],
+    "skill_provenance":  {
+                             "market_research_loaded":  true,
+                             "risk_check_loaded":  true
+                         },
+    "integration_summary":  {
+                                "live_quote":  true,
+                                "live_news":  false,
+                                "llm_agents":  0,
+                                "total_agents":  6,
+                                "band_messages_sent":  0,
+                                "band_handoffs_attempted":  6
+                            },
+    "run_id":  7
+}

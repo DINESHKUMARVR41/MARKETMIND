@@ -3,4 +3,4 @@ python -m venv .venv
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 if (!(Test-Path .env)) { Copy-Item .env.example .env }
-uvicorn app.main:app --reload --port 8000
+uvicorn app.main:app --reload --port 8001

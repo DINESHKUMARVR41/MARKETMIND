@@ -1,18 +1,13 @@
-MARKETMIND quick start
+MARKETMIND — START HERE
 
-1) Open two PowerShell terminals.
-2) Terminal 1:
-   cd MARKETMIND\backend
-   python -m venv .venv
-   .\.venv\Scripts\Activate.ps1
-   pip install -r requirements.txt
-   Copy-Item .env.example .env
-   # Edit .env and add GEMINI_API_KEY (optional; fallback works without it)
-   uvicorn app.main:app --reload --port 8000
-3) Terminal 2:
-   cd MARKETMIND\frontend
-   npm install
-   npm run dev
-4) Open http://localhost:5173
+1. Extract this folder.
+2. Open two PowerShell terminals.
+3. Start backend: run start-backend.bat (port 8001).
+4. Start frontend: run start-frontend.bat (http://localhost:5173).
+5. Copy backend/.env.example to backend/.env and add your own credentials.
+6. Never commit backend/.env or paste secrets into chat.
 
-Full setup and limitations are in README.md.
+IMPORTANT: BAND, Lyzr, AdaL, Finch and Agent 37 require account-specific setup. Read README.md for exact steps. Agent 37 provisioning may incur charges and is manual. Finch has no generic API key. Adal's CLI token is not the webhook token.
+
+API docs: http://localhost:8001/docs
+Health: http://localhost:8001/api/health
