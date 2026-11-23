@@ -1,0 +1,18 @@
+MARKETMIND quick start
+
+1) Open two PowerShell terminals.
+2) Terminal 1:
+   cd MARKETMIND\backend
+   python -m venv .venv
+   .\.venv\Scripts\Activate.ps1
+   pip install -r requirements.txt
+   Copy-Item .env.example .env
+   # Edit .env and add GEMINI_API_KEY (optional; fallback works without it)
+   uvicorn app.main:app --reload --port 8000
+3) Terminal 2:
+   cd MARKETMIND\frontend
+   npm install
+   npm run dev
+4) Open http://localhost:5173
+
+Full setup and limitations are in README.md.
